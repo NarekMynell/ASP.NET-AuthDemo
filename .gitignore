@@ -1,0 +1,28 @@
+# Ignore Visual Studio and cross-platform build artifacts
+[Bb]in/
+[Oo]bj/
+.vs/
+publish/
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+*.nuget.props
+*.nuget.targets
+*.snupkg
+
+# Node.js
+node_modules/
+
+# VS Code specific files
+.vscode/
+# Uncomment if you want to keep settings
+#!.vscode/settings.json
+#!.vscode/tasks.json
+#!.vscode/launch.json
+#!.vscode/extensions.json
+*.code-workspace
+
+# OS-specific files
+.DS_Store
+.directory
