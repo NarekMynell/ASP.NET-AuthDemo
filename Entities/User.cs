@@ -4,7 +4,7 @@ namespace AuthDemo.Entities
 {
     public class User 
     {
-        [Key] // սա Primary Key-ն է
+        [Key]
         public int Id { get; set; }
 
         [MaxLength(50)] 
@@ -21,10 +21,10 @@ namespace AuthDemo.Entities
         [EmailAddress]
         public required string Email { get; set; }
 
-        public required string PasswordHash { get; set; } // մենք Password-ը չենք պահում PlainText-ով
+        public required string PasswordHash { get; set; }
         
-        public required string Sex { get; set; } // "Male" / "Female" / "Other"
+        public required string Sex { get; set; }
 
-        public bool EmailConfirmed { get; set; } = false; // Email հաստատված է թե ոչ
+        public bool EmailConfirmed { get; set; } = false;
     }
 }

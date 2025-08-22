@@ -116,7 +116,6 @@ namespace AuthDemo.Controllers
             if (result == PasswordVerificationResult.Failed)
                 return BadRequest("Սխալ email կամ password");
 
-            // Եթե ցանկանում ենք JWT ստեղծել → այստեղ կարող ենք generate անել
             return Ok(new { message = "Login հաջողվեց" });
         }
     }
