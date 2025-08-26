@@ -1,26 +1,44 @@
+using AuthDemo.Configurations;
 using AuthDemo.Data;
 using AuthDemo.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IEmailService, EmailService>();
-
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+AddServices(builder.Services, builder.Configuration);
+ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+ConfigureMiddleware(app);
+
+app.Run();
+
+void AddServices(IServiceCollection services, IConfiguration configuration)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+    services.AddScoped<IEmailService, EmailService>();
+    services.AddControllers();
+    services.AddSwaggerGen();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
+void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+{
+    services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+    services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+}
+
+void ConfigureMiddleware(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+}

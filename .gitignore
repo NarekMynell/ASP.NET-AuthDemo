@@ -26,3 +26,7 @@ node_modules/
 # OS-specific files
 .DS_Store
 .directory
+
+# appsettings files
+appsettings.json
+appsettings.*.json
