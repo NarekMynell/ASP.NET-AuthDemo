@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
+using AuthDemo.Configurations;
+using Microsoft.Extensions.Options;
 
 namespace AuthDemo.Services
 {
@@ -13,33 +14,25 @@ namespace AuthDemo.Services
 
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly EmailSettings _settings;
 
-        public EmailService(IConfiguration configuration)
+        public EmailService(IOptions<EmailSettings> options)
         {
-            _configuration = configuration;
+            _settings = options.Value;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            var host = _configuration["EmailSettings:Host"];
-            var port = int.Parse(_configuration["EmailSettings:Port"]);
-            var username = _configuration["EmailSettings:Username"];
-            var password = _configuration["EmailSettings:Password"];
-            var fromEmail = _configuration["EmailSettings:FromEmail"];
+            using var client = new SmtpClient(_settings.Host, _settings.Port);
+            client.Credentials = new NetworkCredential(_settings.Username, _settings.Password);
+            client.EnableSsl = true;
 
-            using (var client = new SmtpClient(host, port))
+            var mailMessage = new MailMessage(_settings.FromEmail, to, subject, body)
             {
-                client.Credentials = new NetworkCredential(username, password);
-                client.EnableSsl = true;
+                IsBodyHtml = true
+            };
 
-                var mailMessage = new MailMessage(fromEmail, to, subject, body)
-                {
-                    IsBodyHtml = true
-                };
-
-                await client.SendMailAsync(mailMessage);
-            }
+            await client.SendMailAsync(mailMessage);
         }
     }
 }

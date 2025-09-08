@@ -9,5 +9,6 @@ namespace AuthDemo.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<EmailConfirmationToken> EmailConfirmationTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

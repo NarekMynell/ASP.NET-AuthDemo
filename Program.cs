@@ -20,6 +20,7 @@ void AddServices(IServiceCollection services, IConfiguration configuration)
         options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
     services.AddScoped<IEmailService, EmailService>();
+    services.AddScoped<IJwtService, JwtService>();
     services.AddControllers();
     services.AddSwaggerGen();
 }
